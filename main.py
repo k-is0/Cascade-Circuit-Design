@@ -30,16 +30,19 @@ def main(input_file, output_file):
     output_structure = {name: [] for name, _ in output_data}
     
     # Perform calculations for each frequency
+    matrices = []
     for f in frequencies:
-        matrices = [impedance_init(f, component) for component in circuit_data]
-        total_matrix = cascade_matrices(matrices)
+        matrices.append(impedance_init(f, component) for component in circuit_data)
+        # replace the for loop with list comprehension in impedance_init.py
+        
+    total_matrix = cascade_matrices(matrices)
         
         # Calculate all output variables for this frequency
-        results = calculate_output_variables(total_matrix, terms_data['VT'], terms_data.get('RS', 50), terms_data.get('ZL', 50))
+    results = calculate_output_variables(total_matrix, terms_data['VT'], terms_data.get('RS', 50), terms_data.get('ZL', 50))
 
         # Store the results in the output structure
-        for key in results:
-            output_structure[key].append(results[key])
+    for key in results:
+        output_structure[key].append(results[key])
 
     # Format and write the results to the output file
     all_results = format_all_results(frequencies, output_structure)
