@@ -5,7 +5,7 @@ import cmath
 import csv
 
 # Constants
-Z_SOURCE = 50  # Assuming the source impedance Rs is 50 Ohms if not specified in the file
+Z_SOURCE = 50  # Assuming the source impedanceedance Rs is 50 Ohms if not specified in the file
 
 def parse_net_file(file_path):
     # Parse the input file (as already provided in your code, unchanged)
@@ -21,7 +21,6 @@ def parse_net_file(file_path):
         line = line.strip()
         if not line or line.startswith('#'):
             continue
-        
         if '<CIRCUIT>' in line:
             current_block = 'CIRCUIT'
         elif '</CIRCUIT>' in line:
@@ -42,7 +41,11 @@ def parse_net_file(file_path):
                 if '=' in pair:
                     key, value = pair.split('=', 1)
                     try:
-                        terms_data[key.strip()] = float(value.strip())
+                        # If the key is 'Nfreqs', we need to ensure it is stored as an integer
+                        if key.strip() == 'Nfreqs':
+                            terms_data[key.strip()] = int(float(value.strip()))  # Convert to integer
+                        else:
+                            terms_data[key.strip()] = float(value.strip())
                     except ValueError:
                         terms_data[key.strip()] = value.strip()
         # Adjust the output_data parsing
@@ -59,7 +62,7 @@ def parse_net_file(file_path):
     return circuit_data, terms_data, output_data
 
 def compute_abcd_matrix(frequency, component):
-    pattern = r'n1\s*=\s*(\d+)\s+n2\s*=\s*(\d+)\s+(R|L|C)\s*=\s*([0-9.e+-]+)'
+    pattern = r'n1\s*=\s*(\d+)\s+n2\s*=\s*(\d+)\s+(R|L|C|G)\s*=\s*([0-9.e+-]+)'
     match = re.match(pattern, component.strip())
     if not match:
         print(f"Component format error or unmatched component: '{component}'")
@@ -67,15 +70,30 @@ def compute_abcd_matrix(frequency, component):
 
     node1, node2, type, value = match.groups()
     value = float(value)
+    
+    print(value)
+    print(node1, node2, type, value)
 
     if type == 'R':
-        return np.array([[1, value], [0, 1]])
+        impedance = value 
     elif type == 'L':
-        return np.array([[1, complex(0, 2 * np.pi * frequency * value)], [0, 1]])
+        impedance = 2j * np.pi * frequency * value
     elif type == 'C':
-        return np.array([[1, 0], [complex(0, -1 / (2 * np.pi * frequency * value)), 1]])
-
-    return None  # If none of the types match, return None
+        impedance = 1/(2j * np.pi * frequency * value)
+    elif type == 'G':
+        impedance = 1/value 
+    else:
+        raise ValueError(f"Invalid component type: {type}")
+    
+    # SORT IN ASCENDING N1, N2 ORDER
+    # SIMPLIFY PARALLEL NODES 
+        
+    if node2 == '0':
+        return np.array([[1, 0], [1/impedance, 1]])
+    elif int(node2) == int(node1) + 1:
+        return np.array([[1, impedance], [0, 1]])
+    else:
+        raise ValueError(f"Invalid component nodes: {node1}, {node2}")
 
 def cascade_matrices(matrices):
     result = np.identity(2, dtype=complex)  # Ensure it's a complex type to handle inductors and capacitors
@@ -88,8 +106,8 @@ def cascade_matrices(matrices):
 
 def calculate_output_variables(abcd_matrix, vt, rs, rl):
     a, b, c, d = abcd_matrix[0, 0], abcd_matrix[0, 1], abcd_matrix[1, 0], abcd_matrix[1, 1]
-    zin = (a * rl + b) / (c * rl + d)  # Input impedance seen looking into the source
-    zout = (d * rs + b) / (c * rs + a)  # Output impedance seen looking into the load
+    zin = (a * rl + b) / (c * rl + d)  # Input impedances seen looking into the source
+    zout = (d * rs + b) / (c * rs + a)  # Output impedances seen looking into the load
     
     vin = vt / (zin + rs)
     iin = vin / zin
@@ -110,42 +128,35 @@ def calculate_output_variables(abcd_matrix, vt, rs, rl):
 def format_all_results(frequencies, output_structure):
     formatted_results = []
     for i, f in enumerate(frequencies):
-        result = {
-            'Freq': f"{f:.2e}",  # Ensure frequency is formatted according to the image
-            # Continue with other variables, formatting real and imaginary parts
-            # Since Av and Ai are complex numbers, include their real and imaginary parts
-        }
+        result = {'Freq': f"{f:.3e}"}
         for key in output_structure:
-            if key not in ['Freq', 'Av', 'Ai']:  # 'Freq' is already handled
+            if key not in ['Freq']:  
                 result[f'Re({key})'] = f"{output_structure[key][i].real:.3e}"
                 result[f'Im({key})'] = f"{output_structure[key][i].imag:.3e}"
-            else:
-                result[key] = f"{output_structure[key][i]:.3e}"  # No Re/Im for Av and Ai
         formatted_results.append(result)
     return formatted_results
 
 def write_output_file(filename, output_data, all_results):
     with open(filename, 'w', newline='') as csvfile:
-        # Prepare fieldnames for CSV header, including 'Freq'
-        fieldnames = ['Freq']  # Start with frequency
+        fieldnames = ['Freq']
         for name, unit in output_data:
-            if unit != 'L':  # For complex numbers with units other than 'L'
+            if unit != 'L':  
                 fieldnames.extend([f'Re({name})', f'Im({name})'])
-            else:  # For Av and Ai which have unit 'L'
-                fieldnames.append(name)  # Just use the name as is
+            else:  
+                fieldnames.append(f'Re({name})')
+                fieldnames.append(f'Im({name})')
 
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-        # Prepare units row, special handling for Av and Ai
         units_row = {'Freq': 'Hz'}
         for name, unit in output_data:
             if unit != 'L':
                 units_row[f'Re({name})'] = unit
                 units_row[f'Im({name})'] = unit
             else:
-                units_row[name] = unit
+                units_row[f'Re({name})'] = 'L'
+                units_row[f'Im({name})'] = 'L'
         writer.writerow(units_row)
-        # Write data rows
         for result in all_results:
             writer.writerow(result)
 
@@ -153,13 +164,16 @@ def main(input_file, output_file):
     # Parse the circuit file
     circuit_data, terms_data, output_data = parse_net_file(input_file)
     
-    # Obtain the frequency range and points for analysis
-    f_start = terms_data['Fstart']
-    f_end = terms_data['Fend']
-    n_freqs = int(terms_data['Nfreqs'])
-    
-    # Frequency sweep
-    frequencies = np.logspace(np.log10(f_start), np.log10(f_end), num=n_freqs)
+    if 'LFstart' in terms_data and 'LFend' in terms_data:
+            # Logarithmic sweep
+            f_start = terms_data['LFstart']
+            f_end = terms_data['LFend']
+            frequencies = np.logspace(np.log10(f_start), np.log10(f_end), num=terms_data['Nfreqs'])
+    else:
+        # Linear or default frequency sweep
+        f_start = terms_data.get('Fstart', 1)  # Default start frequency if not specified
+        f_end = terms_data.get('Fend', 1e6)    # Default end frequency if not specified
+        frequencies = np.linspace(f_start, f_end, num=terms_data.get('Nfreqs', 10))
     
     # Output structure preparation
     output_structure = {name: [] for name, _ in output_data}
@@ -185,7 +199,3 @@ if __name__ == "__main__":
         print("Usage: python main.py input_file output_file")
         sys.exit(1)
     main(sys.argv[1], sys.argv[2])
-    
-    
-    
-# maybe you are incorrectly identifying invalid matrices? Because the column output for Re(Vin) is:
