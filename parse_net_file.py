@@ -39,9 +39,11 @@ def parse_net_file(file_path):
                             terms_data[key.strip()] = float(value.strip())
                     except ValueError:
                         terms_data[key.strip()] = value.strip()
+                        
         # Adjust the output_data parsing
         elif current_block == 'OUTPUT' and current_block:
             parts = line.split()
+            
             # If the output variable has no unit (like 'Av' or 'Ai'), manually add 'L'
             if len(parts) == 1:
                 output_data.append((parts[0], 'L'))  # Now 'Av' and 'Ai' have 'L' as unit
@@ -49,5 +51,11 @@ def parse_net_file(file_path):
                 output_data.append((parts[0], parts[1]))
             else:
                 print(f"Warning: Unexpected output format in line: {line}")
+                
+        # Check for Thevenin and Norton source specification
+    if 'VT' in terms_data and 'IN' in terms_data:
+        raise ValueError("Both Thevenin voltage (VT) and Norton current (IN) are specified, which is ambiguous.")
+    elif 'VT' not in terms_data and 'IN' not in terms_data:
+        raise ValueError("Neither Thevenin voltage (VT) nor Norton current (IN) is specified in the terms data.")
 
     return circuit_data, terms_data, output_data
