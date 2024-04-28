@@ -33,14 +33,20 @@ def main(input_file, output_file):
     matrices = []
     for f in frequencies:
         matrices.append(impedance_init(f, component) for component in circuit_data)
-        # replace the for loop with list comprehension in impedance_init.py
+    
+    # for f in frequencies:
+    #     all_matrices = []
+    #     for component in circuit_data:
+    #         matrices = impedance_init(f, component)
+    #         if matrices is not None:
+    #             all_matrices.extend(matrices)
         
     total_matrix = cascade_matrices(matrices)
         
-        # Calculate all output variables for this frequency
+    # Calculate all output variables for this frequency
     results = calculate_output_variables(total_matrix, terms_data['VT'], terms_data.get('RS', 50), terms_data.get('ZL', 50))
 
-        # Store the results in the output structure
+    # Store the results in the output structure
     for key in results:
         output_structure[key].append(results[key])
 
