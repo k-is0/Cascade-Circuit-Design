@@ -1,0 +1,117 @@
+Command is:python main.py ./User_files/a_Test_Circuit_1dB.net ./User_files/a_Test_Circuit_1dB.csv >./User_files/a_Test_Circuit_1dB_run.log 2>&1
+OS returns 0 from execution of command
+For files ./Model_files/a_Test_Circuit_1dB_model.csv and ./User_files/a_Test_Circuit_1dB.csv filecmp returns same=False
+			Detailed testing:
+Working on 12 lines
+Line length differs, model file line has 250 character while user file has 168
+Line length differs, model file line has 250 character while user file has 72
+Line 3 variable 1 differs, model=1.918, user=1.247
+Line 3 variable 2 differs, model=0.004035, user=0.005032
+Line 3 variable 3 differs, model=-147, user=-4.487e-08
+Line 3 variable 4 differs, model=3.137, user=1.894e-10
+Line 3 variable 5 differs, model=-22.49, user=0.07506
+Line 3 variable 6 differs, model=-0.001341, user=-0.0001006
+Line 3 variable 9 differs, model=-10.29, user=0.0936
+Line 3 variable 10 differs, model=0.005376, user=0.0005032
+Line 3 variable 17 differs, model=-148.9, user=-3.598e-08
+Line 3 variable 18 differs, model=3.133, user=2.971e-10
+Line length differs, model file line has 251 character while user file has 216
+Line 4 variable 1 differs, model=11.49, user=3.753
+Line 4 variable 2 differs, model=0.003011, user=0.0113
+Line 4 variable 3 differs, model=-40.14, user=-0.002138
+Line 4 variable 4 differs, model=-1.79, user=-0.009601
+Line 4 variable 5 differs, model=-32.06, user=0.02495
+Line 4 variable 6 differs, model=-0.009058, user=-0.000226
+Line 4 variable 9 differs, model=-10.29, user=0.09361
+Line 4 variable 10 differs, model=0.01207, user=0.00113
+Line 4 variable 17 differs, model=-51.63, user=-0.0005773
+Line 4 variable 18 differs, model=-1.793, user=-0.002557
+Line length differs, model file line has 251 character while user file has 221
+Line 5 variable 1 differs, model=11.49, user=3.753
+Line 5 variable 2 differs, model=0.001505, user=0.005649
+Line 5 variable 3 differs, model=-52.78, user=-0.002041
+Line 5 variable 4 differs, model=-2.665, user=-0.001054
+Line 5 variable 5 differs, model=-32.06, user=0.02494
+Line 5 variable 6 differs, model=-0.004529, user=-0.000113
+Line 5 variable 9 differs, model=-10.29, user=0.09361
+Line 5 variable 10 differs, model=0.006034, user=0.0005649
+Line 5 variable 17 differs, model=-64.26, user=-0.0005443
+Line 5 variable 18 differs, model=-2.666, user=-0.00028
+Line length differs, model file line has 251 character while user file has 220
+Line 6 variable 1 differs, model=11.49, user=3.753
+Line 6 variable 2 differs, model=0.001003, user=0.003764
+Line 6 variable 3 differs, model=-60.33, user=-0.0009215
+Line 6 variable 4 differs, model=-2.849, user=-0.0002779
+Line 6 variable 5 differs, model=-32.06, user=0.02494
+Line 6 variable 6 differs, model=-0.003018, user=-7.528e-05
+Line 6 variable 9 differs, model=-10.29, user=0.09361
+Line 6 variable 10 differs, model=0.004021, user=0.0003764
+Line 6 variable 17 differs, model=-71.82, user=-0.0002456
+Line 6 variable 18 differs, model=-2.85, user=-7.38e-05
+Line length differs, model file line has 251 character while user file has 220
+Line 7 variable 1 differs, model=11.49, user=3.753
+Line 7 variable 2 differs, model=0.0007521, user=0.002822
+Line 7 variable 3 differs, model=-65.52, user=-0.0005175
+Line 7 variable 4 differs, model=-2.928, user=-0.0001122
+Line 7 variable 5 differs, model=-32.06, user=0.02494
+Line 7 variable 6 differs, model=-0.002263, user=-5.645e-05
+Line 7 variable 9 differs, model=-10.29, user=0.09361
+Line 7 variable 10 differs, model=0.003015, user=0.0002822
+Line 7 variable 17 differs, model=-77.01, user=-0.0001379
+Line 7 variable 18 differs, model=-2.929, user=-2.979e-05
+Line length differs, model file line has 251 character while user file has 220
+Line 8 variable 1 differs, model=11.49, user=3.753
+Line 8 variable 2 differs, model=0.0006016, user=0.002258
+Line 8 variable 3 differs, model=-69.49, user=-0.0003306
+Line 8 variable 4 differs, model=-2.973, user=-5.624e-05
+Line 8 variable 5 differs, model=-32.06, user=0.02494
+Line 8 variable 6 differs, model=-0.00181, user=-4.515e-05
+Line 8 variable 9 differs, model=-10.29, user=0.09361
+Line 8 variable 10 differs, model=0.002412, user=0.0002258
+Line 8 variable 17 differs, model=-80.98, user=-8.809e-05
+Line 8 variable 18 differs, model=-2.974, user=-1.493e-05
+Line length differs, model file line has 251 character while user file has 220
+Line 9 variable 1 differs, model=11.49, user=3.753
+Line 9 variable 2 differs, model=0.0005013, user=0.001881
+Line 9 variable 3 differs, model=-72.71, user=-0.0002293
+Line 9 variable 4 differs, model=-3.002, user=-3.218e-05
+Line 9 variable 5 differs, model=-32.06, user=0.02494
+Line 9 variable 6 differs, model=-0.001508, user=-3.763e-05
+Line 9 variable 9 differs, model=-10.29, user=0.09361
+Line 9 variable 10 differs, model=0.00201, user=0.0001881
+Line 9 variable 17 differs, model=-84.2, user=-6.11e-05
+Line 9 variable 18 differs, model=-3.003, user=-8.544e-06
+Line length differs, model file line has 251 character while user file has 220
+Line 10 variable 1 differs, model=11.49, user=3.753
+Line 10 variable 2 differs, model=0.0004297, user=0.001612
+Line 10 variable 3 differs, model=-75.42, user=-0.0001683
+Line 10 variable 4 differs, model=-3.023, user=-2.012e-05
+Line 10 variable 5 differs, model=-32.06, user=0.02494
+Line 10 variable 6 differs, model=-0.001293, user=-3.225e-05
+Line 10 variable 9 differs, model=-10.29, user=0.09361
+Line 10 variable 10 differs, model=0.001723, user=0.0001612
+Line 10 variable 17 differs, model=-86.9, user=-4.485e-05
+Line 10 variable 18 differs, model=-3.023, user=-5.343e-06
+Line length differs, model file line has 251 character while user file has 220
+Line 11 variable 1 differs, model=11.49, user=3.753
+Line 11 variable 2 differs, model=0.000376, user=0.001411
+Line 11 variable 3 differs, model=-77.76, user=-0.0001288
+Line 11 variable 4 differs, model=-3.038, user=-1.342e-05
+Line 11 variable 5 differs, model=-32.06, user=0.02494
+Line 11 variable 6 differs, model=-0.001131, user=-2.822e-05
+Line 11 variable 9 differs, model=-10.29, user=0.09361
+Line 11 variable 10 differs, model=0.001507, user=0.0001411
+Line 11 variable 17 differs, model=-89.24, user=-3.432e-05
+Line 11 variable 18 differs, model=-3.038, user=-3.563e-06
+Line length differs, model file line has 251 character while user file has 220
+Line 12 variable 1 differs, model=11.49, user=3.753
+Line 12 variable 2 differs, model=0.0003342, user=0.001254
+Line 12 variable 3 differs, model=-79.82, user=-0.0001017
+Line 12 variable 4 differs, model=-3.049, user=-9.397e-06
+Line 12 variable 5 differs, model=-32.06, user=0.02494
+Line 12 variable 6 differs, model=-0.001006, user=-2.508e-05
+Line 12 variable 9 differs, model=-10.29, user=0.09361
+Line 12 variable 10 differs, model=0.00134, user=0.0001254
+Line 12 variable 17 differs, model=-91.3, user=-2.71e-05
+Line 12 variable 18 differs, model=-3.05, user=-2.495e-06
+Line length differs, model file line has 251 character while user file has 221

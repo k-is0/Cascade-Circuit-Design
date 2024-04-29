@@ -1,0 +1,1 @@
+[('Vin', 'dBV'), ('Vout', 'dBV'), ('Iin', 'dBA'), ('Iout', 'A'), ('Pin', 'dBW'), ('Zout', 'Ohms'), ('Pout', 'W'), ('Zin', 'Ohms'), ('Av', 'dB'), ('Ai', 'L')]
