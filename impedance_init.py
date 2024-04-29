@@ -21,6 +21,8 @@ def impedance_matrix(frequency, n1, n2, component_type, value):
 
     # Series component between two consecutive nodes
     elif n2 == n1 + 1:
+        if component_type == 'G':
+            return np.array([[1, 1/impedance], [0, 1]])
         return np.array([[1, impedance], [0, 1]])
     else:
         raise ValueError(f"Invalid component connection: {n1} to {n2}")
