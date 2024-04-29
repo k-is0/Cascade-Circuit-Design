@@ -12,8 +12,16 @@ def calculate_output_variables(abcd_matrix, vt, rs, rl):
     iin = vt / (zin + rs) # vin / zin 
     # vout = av * vin  # Voltage output
     # iout = ai * iin  # Current output
-    vout = a * vin + b * iin
-    iout = c * vin + d * iin
+    # vout = (a * vin) + (b * iin)
+    # iout = (c * vin) + (d * iin)
+    
+    matrix = np.matrix([[a, b], [c, d]])
+    inverse_matrix = np.linalg.inv(matrix)
+    vector = np.array([vin, iin])
+    output_vector = np.array(np.dot(inverse_matrix, vector))
+    vout = output_vector[0]
+    iout = 0 if len(output_vector) < 2 else output_vector[1]
+    
     
     pin = vin * np.conj(iin)  # Power input
     pout = vout * np.conj(iout)  # Power output
