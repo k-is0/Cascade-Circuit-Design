@@ -35,7 +35,6 @@ def main(input_file, output_file):
     except ValueError as e:
         print(e)  # If there is a format error in the components
         sys.exit(1)  # Exit the program or handle it as needed
-
     
     if 'LFstart' in terms_data and 'LFend' in terms_data:
             # Logarithmic sweep
@@ -51,28 +50,28 @@ def main(input_file, output_file):
     # Output structure preparation
     output_structure = {name: [] for name, _ in output_data}
     
-    abcd_matrices = []
-    
     for f in frequencies:
+        abcd_matrices = []
         for n1, n2, component_type, value in sorted_components:
             matrix = impedance_matrix(f, n1, n2, component_type, value)
             abcd_matrices.append(matrix)
-        
+    
         total_matrix = cascade_matrices(abcd_matrices)
         
-    print(abcd_matrices)
-        
-    # Calculate all output variables for this frequency
-    results = calculate_output_variables(total_matrix, vt, rs, terms_data.get('ZL', 75))
-    
-    print(terms_data.get('ZL', 75), vt, rs)
+        print(total_matrix)
+            
+        # Calculate all output variables for this frequency
+        results = calculate_output_variables(total_matrix, vt, rs, terms_data.get('ZL', 50))
 
-    # Store the results in the output structure
-    for key in results:
-        output_structure[key].append(results[key])
+        # Store the results in the output structure
+        for key in results:
+            output_structure[key].append(results[key])
 
     # Format and write the results to the output file
     all_results = format_all_results(frequencies, output_structure)
+    
+    print(all_results)
+    
     write_output_file(output_file, output_data, all_results)
 
 if __name__ == "__main__":

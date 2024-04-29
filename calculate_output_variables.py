@@ -5,8 +5,8 @@ def calculate_output_variables(abcd_matrix, vt, rs, rl):
     zin = (a * rl + b) / (c * rl + d)  # Input impedances seen looking into the source
     zout = (d * rs + b) / (c * rs + a)  # Output impedances seen looking into the load
     
-    vin = vt / (zin + rs)
-    iin = vin / zin
+    vin = vt * zin / (zin + rs)  # Voltage input
+    iin = vt / (zin + rs) # vin / zin 
     vout = a * vin + b * iin
     iout = c * vin + d * iin
     

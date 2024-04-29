@@ -6,7 +6,7 @@ def impedance_matrix(frequency, n1, n2, component_type, value):
     elif component_type == 'L':
         impedance = 2j * np.pi * frequency * value
     elif component_type == 'C':
-        impedance = -(1/(2j * np.pi * frequency * value))
+        impedance = (1/(2j * np.pi * frequency * value))
     elif component_type == 'G':
         impedance = 1/value
     else:
