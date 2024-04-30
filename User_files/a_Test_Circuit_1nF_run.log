@@ -1,2 +1,2 @@
 Error: Frequency sweep not specified correctly in terms data.
-cannot access local variable 'frequencies' where it is not associated with a value
+Error: cannot access local variable 'frequencies' where it is not associated with a value

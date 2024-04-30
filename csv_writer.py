@@ -1,61 +1,54 @@
-import csv
-
 def write_csv_header(csvfile, output_data):
     headers = ['      Freq']
     units = ['        Hz']
 
     for header, unit in output_data:
+        # Default unit
         if not unit:
-            unit = "L"  # Default unit if none provided
+            unit = "L"
 
         # Handling different unit types with specific formatting
         if "dB" in unit:
-            real_header = "{:>11}".format("|" + header + "|")
-            imag_header = "{:>11}".format("/_" + header)
+            if "Vout" in header or "Vin" in header:
+                db_unit = "dBV"
+            elif "Iout" in header or "Iin" in header:
+                db_unit = "dBA"
+            elif "Pout" in header or "Pin" in header:
+                db_unit = "dBW"
+            else:
+                db_unit = "dB"
+            
+            # Splitting magnitude and phase into separate columns
+            magnitude_header = "{:>11}".format("|" + header + "|")
+            phase_header = "{:>11}".format("/_" + header)
+            headers.extend([magnitude_header, phase_header])
+            
+            # dBV/dBA/dB and Rads as units for magnitude and phase respectively
+            units.extend(["{:>11}".format(db_unit), "{:>11}".format("Rads")])
         else:
+            # Splitting real and imaginary parts into separate columns
             real_header = "{:>11}".format("Re(" + header + ")")
             imag_header = "{:>11}".format("Im(" + header + ")")
+            headers.extend([real_header, imag_header])
+            units.extend(["{:>11}".format(unit), "{:>11}".format(unit)])
 
-        headers.append(real_header)
-        headers.append(imag_header)
-        units.append("{:>11}".format(unit))
-        units.append("{:>11}".format(unit))
-
-    # Convert lists to strings and join them with commas, ensuring no comma after the last entry
+    # Convert lists to strings and join them with commas and no comma at the end
     header_line = ",".join(headers)
     unit_line = ",".join(units)
 
-    # Write the formatted headers and units to the CSV file
+    # Write the formatted headers and units to CSV file
     csvfile.write(header_line + "\n")
     csvfile.write(unit_line + "\n")
 
-    # fieldnames = ['Freq']
-    # for name, unit in output_data:
-    #     if unit != 'L':  
-    #         fieldnames.extend([f'Re({name})', f'Im({name})'])
-    #     else:  
-    #         fieldnames.append(f'Re({name})')
-    #         fieldnames.append(f'Im({name})')
-
-    # writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    # writer.writeheader()
-    # units_row = {'Freq': 'Hz'}
-    # for name, unit in output_data:
-    #     if unit != 'L':
-    #         units_row[f'Re({name})'] = unit
-    #         units_row[f'Im({name})'] = unit
-    #     else:
-    #         units_row[f'Re({name})'] = 'L'
-    #         units_row[f'Im({name})'] = 'L'
-    # writer.writerow(units_row)
 
 def write_csv_data_row(csvfile, f, output_data, results):
-    # Write frequency directly with no extra padding but with a space before the value
+    # Write frequency directly to file
     csvfile.write(" {:.3e},".format(f))
 
-    # Initialize row for other data
+    # Initialise row for other data
     row = []
-    for name, unit in output_data:
+    for name in output_data:
+        # Get the value from the results dictionary
         value = results[name]
         data_real = "{:.3e}".format(value.real)
         data_imag = "{:.3e}".format(value.imag)
@@ -66,16 +59,6 @@ def write_csv_data_row(csvfile, f, output_data, results):
     
     # Join the rest of the row with commas and write to file
     csvfile.write(",".join(row) + "\n")
-    
-    # row = [f'{f:.3e}']  # Frequency
-    # for output in output_data:
-    #     name = output[0]
-    #     value = results[name]
-    #     row.append(f'{value.real:.3e}')
-    #     row.append(f'{value.imag:.3e}')
-    # row.append('')  # Add an empty field
-    # writer = csv.writer(csvfile)
-    # writer.writerow(row)
 
 def write_empty_output_file(output_file):
     with open(output_file, 'w') as csvfile:
