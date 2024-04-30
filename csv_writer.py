@@ -40,14 +40,13 @@ def write_csv_header(csvfile, output_data):
     csvfile.write(header_line + "\n")
     csvfile.write(unit_line + "\n")
 
-
 def write_csv_data_row(csvfile, f, output_data, results):
     # Write frequency directly to file
     csvfile.write(" {:.3e},".format(f))
 
     # Initialise row for other data
     row = []
-    for name in output_data:
+    for name, unit in output_data:
         # Get the value from the results dictionary
         value = results[name]
         data_real = "{:.3e}".format(value.real)
