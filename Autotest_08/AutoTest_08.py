@@ -10,6 +10,9 @@ import re
 import filecmp
 import EE20084_functions_01 as EE84
 import numpy as np
+import time
+
+t1 = time.time()
 
 def test_char_by_char(logfile,nline,l1,l2):
     """ Test for equality, character by character, between two lines of text
@@ -265,6 +268,7 @@ incorrect_files=files_examined-correct_files
 print("\n%s\n\t\tTotals\n%d files tested, %d correct, %d incorrect"%(divider_line,files_examined, correct_files,incorrect_files))
 print("Correct files are:",correct_list)
 print("Incorrect files are:",incorrect_list)
+print(time.time()-t1, "seconds to run all tests")
 print(divider_line)
 
       

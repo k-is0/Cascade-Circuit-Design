@@ -16,8 +16,6 @@ def main(input_file, output_file):
     # Parse the circuit file
     circuit_data, terms_data, output_data = parse_net_file(input_file)
     
-    print(output_data)
-    
     # Handle source specification
     if 'VT' in terms_data:
         vt = terms_data['VT']
@@ -32,7 +30,7 @@ def main(input_file, output_file):
     
     # Parse and sort components
     try:
-        parsed_components = [parse_component(line) for line in circuit_data]
+        parsed_components = [parse_component(line, output_file) for line in circuit_data]
         sorted_components = sorted(parsed_components, key=lambda x: x[0])
     except ValueError as e:
         print(e)  # If there is a format error in the components
@@ -43,14 +41,17 @@ def main(input_file, output_file):
             f_start = terms_data['LFstart']
             f_end = terms_data['LFend']
             frequencies = np.logspace(np.log10(f_start), np.log10(f_end), num=terms_data['Nfreqs'])
-    else:
+    elif 'Fstart' in terms_data and 'Fend' in terms_data:
         # Linear or default frequency sweep
         f_start = terms_data.get('Fstart', 1)  # Default start frequency if not specified
         f_end = terms_data.get('Fend', 1e6)    # Default end frequency if not specified
         frequencies = np.linspace(f_start, f_end, num=terms_data.get('Nfreqs', 10))
+    else: 
+        print("Error: Frequency sweep not specified correctly in terms data.")
+        write_empty_output_file(output_file)
         
-    # Output structure preparation
-    output_structure = {name: [] for name, _ in output_data}
+    # # Output structure preparation
+    # output_structure = {name: [] for name, _ in output_data}
         
     with open(output_file, 'w') as csvfile:
         write_csv_header(csvfile, output_data)
@@ -67,7 +68,7 @@ def main(input_file, output_file):
             results = calculate_output_variables(total_matrix, vt, rs, terms_data.get('RL', 50), output_data) 
                 
             write_csv_data_row(csvfile, f, output_data, results)
-            
+
     # # Format and write the results to the output file
     # all_results = format_all_results(frequencies, output_structure)
     
@@ -88,7 +89,3 @@ if __name__ == "__main__":
             write_empty_output_file(output_file)
         print(e)
         sys.exit(1)
-    
-    
-    
-# ADD EMPTY LINE at end of file to pass the test

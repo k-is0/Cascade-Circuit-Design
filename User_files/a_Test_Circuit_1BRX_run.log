@@ -1,2 +1,1 @@
-[('Vin', 'dBV'), ('Vout', 'dBV'), ('Iin', 'dBA'), ('Iout', 'A'), ('Pin', 'dBW'), ('Zout', 'Ohms'), ('Pout', 'W'), ('Zin', 'Ohms'), ('Av', 'dB'), ('Ai', 'L')]
-Component format error: 'n1=5 n2=0 R=BREXIT'
+Error: Component 'n1=5 n2=0 R=BREXIT' not formatted correctly.
