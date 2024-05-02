@@ -1,5 +1,4 @@
 import numpy as np
-import cmath
 
 def impedance_matrix(frequency, n1, n2, component_type, value):
     # Convert n1 and n2 to integers to handle node connections properly
@@ -40,17 +39,7 @@ def cascade_matrices(matrices):
             print("Invalid matrix skipped")
     return result
 
-def to_dB(value, reference=1.0):
-    """
-    Convert a given value to decibels with respect to a reference value.
-    For power quantities use reference power and for voltage/current use reference voltage/current.
-    """
-    if value <= 0:
-        raise ValueError("Value must be positive to compute its dB equivalent.")
-    return 10 * np.log10(value / reference)
-
-
-def calculate_output_variables(abcd_matrix, vt, rs, rl, output_data):
+def calculate_output_variables(abcd_matrix, vt, rs, rl):
     a, b, c, d = abcd_matrix.flatten()
     zin = (a * rl + b) / (c * rl + d)  # Input impedances seen looking into the source
     zout = (d * rs + b) / (c * rs + a)  # Output impedances seen looking into the load
@@ -59,17 +48,15 @@ def calculate_output_variables(abcd_matrix, vt, rs, rl, output_data):
     ai = 1 / ((c * rl) + d)  # Current gain
     ap = av * ai.conj() # Power gain
     
-    vin = (vt * zin) / (zin + rs)  # Voltage input
+    vin = vt * zin / (zin + rs)  # Voltage input
     iin = vt / (zin + rs) # vin / zin 
     vout = vin * av  # Voltage output
     iout = iin * ai  # Current output
     pin = vin * iin.conj()  # Power input
     pout = pin * ap  # Power output
     
-    results = {
+    return {
         'Vin': vin, 'Vout': vout, 'Iin': iin, 'Iout': iout, 
         'Pin': pin, 'Zin': zin, 'Pout': pout, 'Zout': zout,
         'Av': av, 'Ai': ai,
     }
-                
-    return results

@@ -1,5 +1,3 @@
-import math
-
 def write_csv_header(csvfile, output_data):
     headers = ['      Freq']
     units = ['        Hz']
@@ -50,24 +48,14 @@ def write_csv_data_row(csvfile, f, output_data, results):
     row = []
     for name, unit in output_data:
         # Get the value from the results dictionary
-        if 'dB' in unit:
-            value = results.get(name, 0)  # Get value if it exists
-            magnitude = abs(value)  # Calculate magnitude of complex number
-            db_value = 20 * math.log10(magnitude) if magnitude > 0 else 0  # Convert to dB
-            data_db = "{:.3e}".format(db_value)
-            # Append formatted dB value
-            row.append(" {:>10}".format(data_db))
-        else:
-            value = results[name]
-            data_real = "{:.3e}".format(value.real if hasattr(value, 'real') else value)
-            data_imag = "{:.3e}".format(value.imag if hasattr(value, 'imag') else 0)
-            # Append space before each value
-            row.append(" {:>10}".format(data_real))
-            row.append(" {:>10}".format(data_imag))
-
-    # Add an empty field to ensure proper column alignment
-    row.append("")
-
+        value = results[name]
+        data_real = "{:.3e}".format(value.real)
+        data_imag = "{:.3e}".format(value.imag)
+        # Append space before each value
+        row.append(" {:>10}".format(data_real))
+        row.append(" {:>10}".format(data_imag))
+    row.append("")  # Add an empty field
+    
     # Join the rest of the row with commas and write to file
     csvfile.write(",".join(row) + "\n")
 

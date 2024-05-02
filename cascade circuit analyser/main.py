@@ -29,7 +29,7 @@ def main(input_file, output_file):
     # Parse and sort components
     try:
         parsed_components = [parse_component(line, output_file) for line in circuit_data]
-        sorted_components = sorted(parsed_components, key=lambda x: (x[0], x[1]))    
+        sorted_components = sorted(parsed_components, key=lambda x: x[0])
     except ValueError as e:
         print(e)        # If there is a format error in the components
         sys.exit(1)     # Exit the program or handle it as needed
@@ -66,7 +66,7 @@ def main(input_file, output_file):
             total_matrix = cascade_matrices(abcd_matrices) # Cascade all matrices to get the total matrix
             
             # Calculate all output variables for this frequency
-            results = calculate_output_variables(total_matrix, vt, rs, terms_data.get('RL', Z_SOURCE), output_data) 
+            results = calculate_output_variables(total_matrix, vt, rs, terms_data.get('RL', 50)) 
             
             # Write the data row to the CSV file
             write_csv_data_row(csvfile, f, output_data, results)
